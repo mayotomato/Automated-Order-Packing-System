@@ -6,13 +6,6 @@ This project implements a simulation of SwiftCart, a highly automated e-commerce
 
 The objective of this assignment is to apply appropriate concurrent program methods in implementing a concurrent program from a program specification.
 
-## Learning Outcomes Achieved
-
-This assignment demonstrates the following learning outcomes:
-
-* Application of the concepts of concurrency and parallelism in the construction of a system using a suitable programming language.
-* Explanation of the safety aspects of multi-threaded and parallel systems.
-
 ## Features Implemented
 
 The simulation incorporates the following key functionalities as per the assignment specifications:
@@ -98,5 +91,3 @@ To compile and run the simulation, follow these steps:
     ```
 
 The console will display real-time activity logs, followed by the final statistical report upon completion.
-
-## Project Structure
