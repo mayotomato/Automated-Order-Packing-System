@@ -56,38 +56,4 @@ The simulation incorporates the following key functionalities as per the assignm
 * **Logging:** Detailed logging for each major activity per thread is provided, including the thread name/ID responsible for the output.
 * **Simulation Duration:** The simulation should take about 5 minutes to simulate 600 orders. Orders arrive every 500ms.
 
-## How to Run the Simulation
-
-To compile and run the simulation, follow these steps:
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-username/SwiftCart-E-commerce-Simulation.git](https://github.com/your-username/SwiftCart-E-commerce-Simulation.git)
-    cd SwiftCart-E-commerce-Simulation
-    ```
-2.  **Compile the Java code:**
-    If you are using Maven/Gradle, you can use:
-    ```bash
-    # For Maven
-    mvn clean install
-    # For Gradle
-    gradle build
-    ```
-    If compiling manually:
-    ```bash
-    javac -d bin src/main/java/com/swiftcart/simulation/*.java src/main/java/com/swiftcart/simulation/util/*.java
-    ```
-3.  **Run the simulation:**
-    If you are using Maven/Gradle, you can use:
-    ```bash
-    # For Maven
-    mvn exec:java -Dexec.mainClass="com.swiftcart.simulation.Main"
-    # For Gradle
-    gradle run
-    ```
-    If running manually:
-    ```bash
-    java -cp bin com.swiftcart.simulation.Main
-    ```
-
 The console will display real-time activity logs, followed by the final statistical report upon completion.
