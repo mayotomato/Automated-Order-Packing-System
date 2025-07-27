@@ -1,69 +1,67 @@
-﻿# Automated Order Packing System
+# SwiftCart E-commerce Centre Simulation
 
 ## Project Overview
 
-This project implements a simulation of SwiftCart, a highly automated e-commerce centre, using concurrent programming techniques in Java. [cite_start]The simulation models the end-to-end process of online order fulfillment, from order intake to final dispatch, emphasizing concurrent activities, resource management, and error handling. [cite: 5]
+This project implements a simulation of SwiftCart, a highly automated e-commerce centre, using concurrent programming techniques in Java. The simulation models the end-to-end process of online order fulfillment, from order intake to final dispatch, emphasizing concurrent activities, resource management, and error handling.
 
-[cite_start]The objective of this assignment is to apply appropriate concurrent programming methods in implementing a concurrent program from a program specification. [cite: 5]
+The objective of this assignment is to apply appropriate concurrent program methods in implementing a concurrent program from a program specification.
 
 ## Learning Outcomes Achieved
 
 This assignment demonstrates the following learning outcomes:
 
-* [cite_start]Application of concurrency and parallelism concepts in the construction of a system using a suitable programming language (Java). [cite: 8]
-* [cite_start]Explanation of the safety aspects of multi-threaded and parallel systems. [cite: 8]
+* Application of the concepts of concurrency and parallelism in the construction of a system using a suitable programming language.
+* Explanation of the safety aspects of multi-threaded and parallel systems.
 
 ## Features Implemented
 
 The simulation incorporates the following key functionalities as per the assignment specifications:
 
-### [cite_start]Basic Requirements [cite: 28]
+### Basic Requirements
 
 * **Order Intake System:**
-    * [cite_start]Orders arrive at a rate of 1 order every 500ms. [cite: 32]
-    * [cite_start]Orders are verified for payment, inventory, and shipping address. [cite: 33]
+    * Orders arrive from the online platform at a rate of 1 order every 500ms.
+    * Each order is verified for payment, inventory availability, and shipping address.
 * **Picking Station:**
-    * [cite_start]Robotic arms pick items and place them into order bins. [cite: 35]
-    * [cite_start]Up to 4 orders can be picked concurrently. [cite: 36]
-    * [cite_start]Orders are verified for missing items. [cite: 37]
+    * Robotic arms pick items from shelves and place them into order bins.
+    * Up to 4 orders can be picked at a time.
+    * Orders are verified for missing items.
 * **Packing Station:**
-    * [cite_start]Completed bins are packed into shipping boxes (1 order at a time). [cite: 42]
-    * [cite_start]A scanner checks each box to ensure contents match the order. [cite: 43]
+    * Completed bins are packed into shipping boxes (1 order at a time).
+    * A scanner checks each box to ensure contents match the order.
 * **Labelling Station:**
-    * [cite_start]Each box is assigned a shipping label with destination and tracking. [cite: 45]
-    * [cite_start]Boxes pass through a quality scanner (1 at a time). [cite: 46]
+    * Each box is assigned a shipping label with destination and tracking.
+    * Boxes pass through a quality scanner (1 at a time).
 * **Sorting Area:**
-    * [cite_start]Boxes are sorted into batches of 6 based on regional zones. [cite: 48]
-    * [cite_start]Batches are loaded into transport containers (27 boxes per container). [cite: 49]
+    * Boxes are sorted into batches of 6 boxes based on regional zones.
+    * Batches are loaded into transport containers (27 boxes per container).
 * **Loading Bay & Transport:**
-    * [cite_start]3 autonomous loaders (AGVs) transfer containers to 2 outbound loading bays. [cite: 52]
-    * [cite_start]Trucks take up to 18 containers and leave for delivery hubs. [cite: 53]
-    * [cite_start]Incoming trucks wait if both bays are occupied. [cite: 54]
+    * 3 autonomous loaders (AGVs) transfer containers to 2 outbound loading bays.
+    * Trucks take up to 18 containers and leave for delivery hubs.
+    * If both bays are occupied, incoming trucks must wait.
 
-### [cite_start]Additional Requirements [cite: 55]
+### Additional Requirements
 
-* [cite_start]**Defective Orders:** Orders may be rejected at any stage (e.g., out-of-stock, packing errors, mislabelling) and are removed by a reject handler and logged. [cite: 58, 59]
-* [cite_start]**Capacity Constraints:** The loading bay has a space for only 20 containers; if full, packing pauses. [cite: 61]
+* **Defective Orders:** Orders may be rejected at any stage (e.g., out-of-stock items, packing errors, mislabelling). Defective orders are removed by a reject handler and logged.
+* **Capacity Constraints:** The loading bay has space for only 20 containers. If full, packing must pause.
 * **Autonomous Loaders (AGVs):**
-    * [cite_start]Only 3 loaders are available. [cite: 63]
-    * [cite_start]Simulated random breakdowns (thread stalls). [cite: 63, 81]
-    * [cite_start]Trucks are loaded only when a loader and bay are free. [cite: 64]
-* [cite_start]**Concurrent Activities:** Loaders and outbound trucks operate concurrently, simulating congestion scenarios where trucks wait for loading bays. [cite: 66, 67]
-* [cite_start]**Statistical Report:** Upon completion (600 orders processed and all trucks departed), a detailed report is printed including: [cite: 69, 78]
-    * [cite_start]Confirmation that all orders, boxes, and containers have been cleared. [cite: 70]
-    * [cite_start]Maximum, minimum, and average loading and wait time per truck. [cite: 71]
-    * [cite_start]Total number of orders processed, rejected, boxes packed, containers shipped, and trucks dispatched. [cite: 76]
+    * Only 3 loaders are available and can break down randomly (simulated with thread stalls).
+    * Trucks can only be loaded when a loader and bay are free.
+* **Concurrent Activities:**
+    * Loaders and outbound trucks operate concurrently.
+    * Congestion is simulated (e.g., 1 truck is waiting while both loading bays are in use).
+* **Statistical Report:** When all trucks have departed for the day, the system should print a detailed report:
+    * Confirm that all orders, boxes, and containers have been cleared.
+    * Maximum, minimum and average loading and wait time per truck.
+    * Total number of orders processed, rejected, boxes packed, containers shipped and trucks dispatched.
 
 ## Implementation Details
 
-* [cite_start]**Programming Language:** Java [cite: 98]
+* **Programming Language:** Java
 * **Concurrency Model:** Implemented using Java's built-in `Thread` classes, and concurrent programming facilities to manage shared resources, synchronization, and inter-thread communication.
-* **Key Concurrent Programming Facilities Utilized:** (You'll fill this in based on your actual implementation)
-    * `java.util.concurrent` package (e.g., `Executors`, `BlockingQueue`, `Semaphore`, `CyclicBarrier`)
-    * `synchronized` keyword, `wait()`, `notifyAll()`
-    * Atomic operations
-* [cite_start]**Logging:** Detailed logging for each major activity per thread is provided, including the thread name/ID responsible for the output. [cite: 84, 87]
-* [cite_start]**Simulation Duration:** The simulation is designed to run for approximately 5 minutes for 600 orders. [cite: 78, 99]
+* **Key Concurrent Programming Facilities Utilized:** (You'll fill this in based on your actual implementation, e.g., `java.util.concurrent` package, `synchronized` keyword, `wait()`, `notifyAll()`, etc.)
+* **Logging:** Detailed logging for each major activity per thread is provided, including the thread name/ID responsible for the output.
+* **Simulation Duration:** The simulation should take about 5 minutes to simulate 600 orders. Orders arrive every 500ms.
 
 ## How to Run the Simulation
 
