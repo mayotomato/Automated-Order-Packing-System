@@ -8,15 +8,25 @@ package main.java.com.swiftcartsystem;
  *
  * @author zechn
  */
-public class OrderBin {
+public class Box {
     private final Order order;
+    private final String trackingId;
 
-    public OrderBin(Order order) {
+    public Box(Order order, String trackingId) {
         this.order = order;
+        this.trackingId = trackingId;
     }
 
     public Order getOrder() {
         return order;
     }
-}
 
+    public String getTrackingId() {
+        return trackingId;
+    }
+
+    @Override
+    public String toString() {
+        return "Box for Order #" + order.getId() + " [Tracking ID: " + trackingId + "]";
+    }
+}
