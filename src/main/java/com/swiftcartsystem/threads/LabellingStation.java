@@ -32,7 +32,7 @@ public class LabellingStation implements Runnable {
                 if (RandomUtil.shouldReject()) {
                     bin.getOrder().reject();
                     rejectedQueue.put(bin.getOrder());
-                    Logger.log("LabellingStation", "Rejected Order #" + bin.getOrder().getId());
+                    Logger.log("LabellingStation", "Rejected Order #" + bin.getOrder().getId()+ ", quality not met");
                     continue;
                 }
                 String trackingId = RandomUtil.generateTrackingId();
@@ -40,7 +40,7 @@ public class LabellingStation implements Runnable {
                 labellingQueue.put(box);
                 Logger.log("LabellingStation", "Labelled Order #" + bin.getOrder().getId() + " with Tracking ID: " + trackingId);
                 Thread.sleep(300);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e) { 
                 break;
             }
         }

@@ -17,11 +17,13 @@ public class AutonomousLoader implements Runnable {
     private final BlockingQueue<Container> sortingQueue;
     private final BlockingQueue<Container> loadingQueue;
     private final Semaphore loaderSemaphore;
+    private final Object bayLock;
 
-    public AutonomousLoader(BlockingQueue<Container> sortingQueue, BlockingQueue<Container> loadingQueue, Semaphore loaderSemaphore) {
+    public AutonomousLoader(BlockingQueue<Container> sortingQueue, BlockingQueue<Container> loadingQueue, Semaphore loaderSemaphore, Object bayLock) {
         this.sortingQueue = sortingQueue;
         this.loadingQueue = loadingQueue;
         this.loaderSemaphore = loaderSemaphore;
+        this.bayLock = bayLock;
     }
 
     public void run() {
@@ -35,8 +37,16 @@ public class AutonomousLoader implements Runnable {
                     Thread.sleep(2000);
                 }
 
-                loadingQueue.put(container);
-                Logger.log("AutonomousLoader", "Moved container to loading bay.");
+                synchronized (bayLock) {
+                    while (loadingQueue.size() >= 5) {
+                        Logger.log("AutonomousLoader", "Loading bay full. Waiting...");
+                        bayLock.wait();
+                    }
+                    loadingQueue.put(container);
+                    Logger.log("AutonomousLoader", "Moved container to loading bay.");
+                    bayLock.notifyAll();
+                }
+
                 loaderSemaphore.release();
             } catch (InterruptedException e) {
                 break;

@@ -16,16 +16,26 @@ import java.util.*;
 
 public class Truck implements Runnable {
     private final BlockingQueue<Container> loadingQueue;
+    private final Object bayLock;
 
-    public Truck(BlockingQueue<Container> loadingQueue) {
+    public Truck(BlockingQueue<Container> loadingQueue, Object bayLock) {
         this.loadingQueue = loadingQueue;
+        this.bayLock = bayLock;
     }
 
     public void run() {
         List<Container> containers = new ArrayList<>();
         while (true) {
             try {
-                Container container = loadingQueue.take();
+                Container container;
+                synchronized (bayLock) {
+                    while (loadingQueue.isEmpty()) {
+                        bayLock.wait();
+                    }
+                    container = loadingQueue.take();
+                    bayLock.notifyAll();
+                }
+
                 containers.add(container);
                 Logger.log("Truck", "Loaded container. Current count: " + containers.size());
 

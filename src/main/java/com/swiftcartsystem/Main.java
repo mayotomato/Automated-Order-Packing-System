@@ -18,19 +18,20 @@ public class Main {
         BlockingQueue<Order> rejectedQueue = new LinkedBlockingQueue<>();
 
         Semaphore loaderSemaphore = new Semaphore(3, true);
+        Object bayLock = new Object();
 
         new Thread(new OrderIntakeSystem(intakeQueue)).start();
         new Thread(new PickingStation(intakeQueue, pickingQueue, rejectedQueue)).start();
-        new Thread(new PackingStation(pickingQueue, packingQueue, rejectedQueue)).start();
+        new Thread(new PackingStation(pickingQueue, packingQueue, rejectedQueue, loadingQueue, bayLock)).start();
         new Thread(new LabellingStation(packingQueue, labellingQueue, rejectedQueue)).start();
         new Thread(new SortingArea(labellingQueue, sortingQueue)).start();
 
         for (int i = 0; i < 3; i++) {
-            new Thread(new AutonomousLoader(sortingQueue, loadingQueue, loaderSemaphore)).start();
+            new Thread(new AutonomousLoader(sortingQueue, loadingQueue, loaderSemaphore, bayLock)).start();
         }
 
         for (int i = 0; i < 2; i++) {
-            new Thread(new Truck(loadingQueue)).start();
+            new Thread(new Truck(loadingQueue, bayLock)).start();
         }
 
         new Thread(new RejectHandler(rejectedQueue)).start();

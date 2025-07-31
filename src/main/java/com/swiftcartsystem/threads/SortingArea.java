@@ -36,12 +36,12 @@ public class SortingArea implements Runnable {
                     container.addBatch(batch);
                     batch = new Batch();
                     Logger.log("SortingArea", "Batch added to Container");
+                }
 
-                    if (container.isFull()) {
-                        sortingQueue.put(container);
-                        Logger.log("SortingArea", "Container full. Sent for loading.");
-                        container = new Container();
-                    }
+                if (container.isFull()) {
+                    sortingQueue.put(container);
+                    Logger.log("SortingArea", "Container full (30 boxes). Sent for loading.");
+                    container = new Container();
                 }
             } catch (InterruptedException e) {
                 break;
