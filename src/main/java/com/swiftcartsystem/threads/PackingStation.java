@@ -41,11 +41,17 @@ public class PackingStation implements Runnable {
 
                 OrderBin bin = pickingQueue.take();
                 if (RandomUtil.shouldReject()) {
+                    bin.modifyContentsRandomly();
+                    Logger.log("PackingStation", "Contents modified for Order #" + bin.getOrder().getId());
+                }
+
+                if (!bin.matchesOrderContents()) {
                     bin.getOrder().reject();
                     rejectedQueue.put(bin.getOrder());
-                    Logger.log("PackingStation", "Rejected Order #" + bin.getOrder().getId());
+                    Logger.log("PackingStation", "Rejected Order #" + bin.getOrder().getId() + " due to mismatched contents.");
                     continue;
                 }
+
                 packingQueue.put(bin);
                 Logger.log("PackingStation", "Packed Order #" + bin.getOrder().getId());
                 Thread.sleep(300);
@@ -55,4 +61,3 @@ public class PackingStation implements Runnable {
         }
     }
 }
-
