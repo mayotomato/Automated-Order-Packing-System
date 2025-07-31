@@ -23,7 +23,7 @@ public class Container {
     }
 
     public boolean isFull() {
-        return totalBoxes() >= 27;
+        return totalBoxes() >= 30;
     }
 
     public List<Batch> getBatches() {

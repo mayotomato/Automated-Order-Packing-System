@@ -13,7 +13,7 @@ public class Main {
         BlockingQueue<OrderBin> pickingQueue = new LinkedBlockingQueue<>();
         BlockingQueue<OrderBin> packingQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Box> labellingQueue = new LinkedBlockingQueue<>();
-        BlockingQueue<Box> sortingQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<Container> sortingQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Container> loadingQueue = new LinkedBlockingQueue<>();
         BlockingQueue<Order> rejectedQueue = new LinkedBlockingQueue<>();
 
