@@ -30,8 +30,8 @@ public class PackingStation implements Runnable {
     }
 
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (true) {
                 synchronized (bayLock) {
                     while (loadingQueue.size() >= 5) {
                         Logger.log("PackingStation", "Loading bay full. Pausing packing.");
@@ -40,24 +40,30 @@ public class PackingStation implements Runnable {
                 }
 
                 OrderBin bin = pickingQueue.take();
+                if (bin == OrderBin.terminate) {
+                    packingQueue.put(OrderBin.terminate);
+                    break;
+                }
+
                 if (RandomUtil.shouldReject()) {
                     bin.modifyContentsRandomly();
-                    Logger.log("PackingStation", "Contents modified for Order #" + bin.getOrder().getId());
                 }
 
                 if (!bin.matchesOrderContents()) {
                     bin.getOrder().reject();
                     rejectedQueue.put(bin.getOrder());
+                    ReportGenerator.incrementOrdersRejected();
                     Logger.log("PackingStation", "Rejected Order #" + bin.getOrder().getId() + " due to mismatched contents.");
                     continue;
                 }
 
                 packingQueue.put(bin);
+                ReportGenerator.incrementBoxesPacked();
                 Logger.log("PackingStation", "Packed Order #" + bin.getOrder().getId());
                 Thread.sleep(300);
-            } catch (InterruptedException e) {
-                break;
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

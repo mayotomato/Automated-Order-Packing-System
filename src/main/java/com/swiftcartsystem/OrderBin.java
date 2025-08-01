@@ -13,6 +13,7 @@ import java.util.*;
 public class OrderBin {
     private final Order order;
     private final List<String> pickedItems;
+    public static final OrderBin terminate = new OrderBin(Order.terminate);
 
     public OrderBin(Order order) {
         this.order = order;

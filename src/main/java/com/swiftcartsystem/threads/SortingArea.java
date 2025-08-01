@@ -26,9 +26,16 @@ public class SortingArea implements Runnable {
         Batch batch = new Batch();
         Container container = new Container();
 
-        while (true) {
-            try {
+        try {
+            while (true) {
                 Box box = labellingQueue.take();
+                if (box == Box.terminate) {
+                    for (int i = 0; i < 3; i++) {
+                        sortingQueue.put(Container.terminate);
+                    }
+                    break;
+                }
+
                 batch.addBox(box);
                 Logger.log("SortingArea", "Added Box for Order #" + box.getOrder().getId() + " to Batch");
 
@@ -43,9 +50,9 @@ public class SortingArea implements Runnable {
                     Logger.log("SortingArea", "Container full (30 boxes). Sent for loading.");
                     container = new Container();
                 }
-            } catch (InterruptedException e) {
-                break;
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

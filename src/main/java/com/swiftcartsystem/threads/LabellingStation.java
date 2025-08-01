@@ -26,23 +26,30 @@ public class LabellingStation implements Runnable {
     }
 
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (true) {
                 OrderBin bin = packingQueue.take();
+                if (bin == OrderBin.terminate) {
+                    labellingQueue.put(Box.terminate); // pass shutdown signal
+                    break;
+                }
+
                 if (RandomUtil.shouldReject()) {
                     bin.getOrder().reject();
                     rejectedQueue.put(bin.getOrder());
-                    Logger.log("LabellingStation", "Rejected Order #" + bin.getOrder().getId()+ ", quality not met");
+                    ReportGenerator.incrementOrdersRejected();
+                    Logger.log("LabellingStation", "Rejected Order #" + bin.getOrder().getId() + ". Mislabelled");
                     continue;
                 }
+
                 String trackingId = RandomUtil.generateTrackingId();
                 Box box = new Box(bin.getOrder(), trackingId);
                 labellingQueue.put(box);
                 Logger.log("LabellingStation", "Labelled Order #" + bin.getOrder().getId() + " with Tracking ID: " + trackingId);
                 Thread.sleep(300);
-            } catch (InterruptedException e) { 
-                break;
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

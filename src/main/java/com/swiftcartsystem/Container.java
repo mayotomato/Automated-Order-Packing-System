@@ -13,7 +13,14 @@ import java.util.List;
 
 public class Container {
     private final List<Batch> batches = new ArrayList<>();
+    public static final Container terminate = createTerminateContainer();
 
+    private static Container createTerminateContainer() {
+        Container c = new Container();
+        c.batches.add(Batch.terminate);
+        return c;
+    }
+    
     public void addBatch(Batch batch) {
         batches.add(batch);
     }

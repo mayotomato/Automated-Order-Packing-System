@@ -17,24 +17,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderIntakeSystem implements Runnable {
     private final BlockingQueue<Order> intakeQueue;
+    private static final int MAX_ORDERS = 600;
     private static final AtomicInteger idCounter = new AtomicInteger(1);
-    
+
     public OrderIntakeSystem(BlockingQueue<Order> intakeQueue) {
         this.intakeQueue = intakeQueue;
     }
 
     public void run() {
-        while (true) {
-            try {
+        try {
+            for (int i = 0; i < MAX_ORDERS; i++) {
                 int id = idCounter.getAndIncrement();
                 Order order = new Order(id, RandomUtil.getRandomOrderContents());
                 intakeQueue.put(order);
                 Logger.log("OrderIntake", "Order #" + order.getId() + " received with contents: " + order.getContents());
-                ReportGenerator.incrementOrdersProcessed();
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
-                break;
             }
+            // Signal end of orders
+            intakeQueue.put(Order.terminate);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

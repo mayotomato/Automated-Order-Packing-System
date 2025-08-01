@@ -21,13 +21,15 @@ public class RejectHandler implements Runnable {
     }
 
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (true) {
                 Order order = rejectedQueue.take();
+                if (order == Order.terminate) break;
+
                 Logger.log("RejectHandler", "Handled rejected order #" + order.getId());
-            } catch (InterruptedException e) {
-                break;
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

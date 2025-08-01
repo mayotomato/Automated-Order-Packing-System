@@ -25,8 +25,8 @@ public class Truck implements Runnable {
 
     public void run() {
         List<Container> containers = new ArrayList<>();
-        while (true) {
-            try {
+        try {
+            while (true) {
                 Container container;
                 synchronized (bayLock) {
                     while (loadingQueue.isEmpty()) {
@@ -36,17 +36,28 @@ public class Truck implements Runnable {
                     bayLock.notifyAll();
                 }
 
+                if (container == Container.terminate) {
+                    // Shutdown signal: deliver what's left, then exit
+                    if (!containers.isEmpty()) {
+                        Logger.log("Truck", "Final dispatch with " + containers.size() + " containers.");
+                        containers.clear();
+                    }
+                    break;
+                }
+
                 containers.add(container);
                 Logger.log("Truck", "Loaded container. Current count: " + containers.size());
+                ReportGenerator.incrementContainersShipped();
 
                 if (containers.size() >= 18) {
+                    ReportGenerator.incrementTrucksDispatched();
                     Logger.log("Truck", "Fully loaded with 18 containers. Departing.");
                     containers.clear();
                     Thread.sleep(1000);
                 }
-            } catch (InterruptedException e) {
-                break;
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

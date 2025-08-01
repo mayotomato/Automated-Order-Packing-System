@@ -15,6 +15,7 @@ public class Order {
     private final int id;
     private boolean rejected = false;
     private final List<String> contents;
+    public static final Order terminate = new Order(-1, Collections.emptyList());
 
     public Order(int id, List<String> contents) {
         this.id = id;

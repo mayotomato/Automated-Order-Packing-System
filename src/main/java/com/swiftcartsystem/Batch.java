@@ -13,7 +13,14 @@ import java.util.List;
  */
 public class Batch {
     private final List<Box> boxes = new ArrayList<>();
-
+    public static final Batch terminate = createTerminateBatch();
+    
+    private static Batch createTerminateBatch() {
+        Batch batch = new Batch();
+        batch.boxes.add(Box.terminate); // Add termination box as placeholder
+        return batch;
+    }
+    
     public void addBox(Box box) {
         boxes.add(box);
     }

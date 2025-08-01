@@ -25,22 +25,30 @@ public class PickingStation implements Runnable {
     }
 
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (true) {
                 Order order = intakeQueue.take();
+                if (order == Order.terminate) {
+                    pickingQueue.put(OrderBin.terminate); // signal downstream
+                    break;
+                }
+
                 if (RandomUtil.shouldReject()) {
                     order.reject();
                     rejectedQueue.put(order);
-                    Logger.log("PickingStation", "Rejected Order #" + order.getId());
+                    ReportGenerator.incrementOrdersRejected();
+                    Logger.log("PickingStation", "Rejected Order #" + order.getId() + ". Items out of stock.");
                     continue;
                 }
+
                 OrderBin bin = new OrderBin(order);
                 pickingQueue.put(bin);
+                ReportGenerator.incrementOrdersProcessed();
                 Logger.log("PickingStation", "Picked Order #" + order.getId());
                 Thread.sleep(300);
-            } catch (InterruptedException e) {
-                break;
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

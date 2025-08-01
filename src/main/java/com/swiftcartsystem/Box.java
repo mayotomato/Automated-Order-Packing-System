@@ -11,6 +11,7 @@ package main.java.com.swiftcartsystem;
 public class Box {
     private final Order order;
     private final String trackingId;
+    public static final Box terminate = new Box(Order.terminate, "-1");
 
     public Box(Order order, String trackingId) {
         this.order = order;
