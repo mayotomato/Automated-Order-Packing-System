@@ -50,10 +50,10 @@ The simulation incorporates the following key functionalities as per the assignm
 
 ## Implementation Details
 
-* **Programming Language:** Java
 * **Concurrency Model:** Implemented using Java's built-in `Thread` classes, and concurrent programming facilities to manage shared resources, synchronization, and inter-thread communication.
 * **Key Concurrent Programming Facilities Utilized:** (You'll fill this in based on your actual implementation, e.g., `java.util.concurrent` package, `synchronized` keyword, `wait()`, `notifyAll()`, etc.)
 * **Logging:** Detailed logging for each major activity per thread is provided, including the thread name/ID responsible for the output.
 * **Simulation Duration:** The simulation should take about 5 minutes to simulate 600 orders. Orders arrive every 500ms.
 
 The console will display real-time activity logs, followed by the final statistical report upon completion.
+
